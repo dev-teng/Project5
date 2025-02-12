@@ -23,7 +23,7 @@ function Register () {
       <input id="confirmpassword" type="email" className="form-control mb-3"></input>
       <button className="btn btn-dark mt-3 mb-2">Login</button>
       <br></br>
-      <Link to="/">Already Have an Account? Login Here</Link>
+      <Link to="/login">Already Have an Account? Login Here</Link>
     </div>
   </div>
   )
