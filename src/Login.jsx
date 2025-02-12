@@ -1,3 +1,4 @@
+import { Link, Outlet } from "react-router-dom"
 function Login () {
   return(
     <div className="container-fluid p-5" style={{width: "50rem"}}>
@@ -8,7 +9,9 @@ function Login () {
         <input id="email" type="email" className="form-control"></input>
         <label htmlFor="password">Password</label>
         <input id="password" type="email" className="form-control"></input>
-        <button className="btn btn-dark mt-3">Login</button>
+        <button className="btn btn-dark mt-3 mb-2">Login</button> 
+        <br></br>
+        <Link to="/register">Don't Have Account? Register Here</Link>
       </div>
     </div>
     
