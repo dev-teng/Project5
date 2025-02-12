@@ -7,10 +7,13 @@ function App() {
 
 
   return (
-
-     <>
-     <Login />
-     </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/">
+          <Route index element={<Login />}/>
+        </Route>
+      </Routes>
+    </BrowserRouter>
   )
 }
 
