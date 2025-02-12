@@ -19,6 +19,8 @@ function Register () {
       <input id="email" type="email" className="form-control mb-3"></input>
       <label htmlFor="password">Password</label>
       <input id="password" type="email" className="form-control mb-3"></input>
+      <label htmlFor="confirmpassword">Confirm password</label>
+      <input id="confirmpassword" type="email" className="form-control mb-3"></input>
       <button className="btn btn-dark mt-3 mb-2">Login</button>
       <br></br>
       <Link to="/">Already Have an Account? Login Here</Link>
