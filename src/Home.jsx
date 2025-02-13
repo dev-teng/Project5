@@ -1,6 +1,13 @@
 import Sync from "./Sync";
+import { useState, useEffect } from "react";
+import firebaseApp from './firebaseConfig';
+import { useNavigate } from "react-router-dom";
+import {getAuth, onAuthStateChanged} from 'firebase/auth';
 
 function Home() {
+
+  
+
   return (
     <div className="container-fluid p-5 bg-secondary-subtle d-flex flex-column" style={{ minHeight: "100vh" }}>
       <div className="row mb-5">
