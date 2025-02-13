@@ -2,7 +2,7 @@ import Sync from "./Sync";
 import { useState, useEffect } from "react";
 import firebaseApp from './firebaseConfig';
 import { useNavigate } from "react-router-dom";
-import {getAuth, onAuthStateChanged} from 'firebase/auth';
+import {getAuth, onAuthStateChanged, signOut} from 'firebase/auth';
 
 function Home() {
 
@@ -19,6 +19,13 @@ function Home() {
     });
   }, [])
 
+  const logout = () => {
+    const auth = getAuth(firebaseApp)
+    signOut(auth).then(() => {
+      navigate("login");
+    });
+  }
+
 
   return (
     <div className="container-fluid p-5 bg-secondary-subtle d-flex flex-column" style={{ minHeight: "100vh" }}>
@@ -28,7 +35,7 @@ function Home() {
           <div className="card-body d-grid">
             <span>Username</span>
             <span>teng@test.com</span>
-            <button className="btn btn-secondary d-grid mt-3">Logout</button>
+            <button onClick={logout} className="btn btn-secondary d-grid mt-3">Logout</button>
           </div>
         </div>
       </div>
