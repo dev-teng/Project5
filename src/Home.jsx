@@ -1,4 +1,4 @@
-import Sync from "./Sync"
+import Sync from "./Sync";
 
 function Home() {
   return (
