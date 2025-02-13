@@ -2,6 +2,7 @@ import { Link} from "react-router-dom";
 import firebaseApp from './firebaseConfig';
 import {getAuth, createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import { useState } from "react";
+import Swal from 'sweetalert2'
 function Register () {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -17,9 +18,17 @@ function Register () {
       confirmPassword !== "" &&
       password === confirmPassword
     ){
-      alert("registration successfull!");
+      Swal.fire({
+        title: "Registration!",
+        text: "Success!",
+        icon: "success"
+      });
     }else {
-      alert("There are errors in the registration process. Please try again later.")
+      Swal.fire({
+        title: "Error!",
+        text: "There are errors in the registration process. Please try again later.!",
+        icon: "error"
+      });
     }
   }
 
