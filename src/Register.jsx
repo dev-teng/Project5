@@ -15,29 +15,57 @@ function Register () {
       <div className="bg-danger-subtle p-5 m-5 rounded">
           <h3 className="text-center">Create an Account</h3>
           <p className="text-center mb-5 fs-5">Sign up here⬇️</p>
-
           <div className="row mb-4">
               <div className="col-md-6">
                 <label htmlFor="firstname">First Name</label>
-                <input id="firstname" type="email" className="form-control"></input>
+                <input id="firstname"
+                  onChange={(e) =>{
+                  setFirstname(e.target.value)
+                  }}
+                  value={firstname}
+                  type="text" className="form-control"
+                />
               </div>
 
               <div className="col-md-6">
                 <label htmlFor="lastname">Last Name</label>
-                <input id="lastname" type="email" className="form-control"></input>
+                <input id="lastname" 
+                  onChange={(e) => {
+                  setLastname(e.target.value)
+                  }} 
+                  value={lastname}
+                  type="text" className="form-control"
+                />
               </div>
           </div>
 
           <div>
               <label htmlFor="email">Email</label>
-              <input id="email" type="email" className="form-control mb-3"></input>
+              <input id="email" 
+                onChange={(e) => {
+                setEmail(e.target.value)
+                }} 
+                value={email}
+                type="email" className="form-control mb-3"
+              />
 
               <label htmlFor="password">Password</label>
-              <input id="password" type="email" className="form-control mb-3"></input>
+              <input id="password" onChange={(e) => {
+                setPassword(e.target.value)
+                }} 
+                value={password}
+                type="password" className="form-control mb-3"
+              />
 
               <label htmlFor="confirmpassword">Confirm password</label>
-              <input id="confirmpassword" type="email" className="form-control mb-3"></input>
-
+              <input id="confirmpassword" 
+                onChange={(e) => {
+                setConfirmPassword(e.target.value)
+                }}
+                value={confirmPassword}
+                type="password" className="form-control mb-3"
+              />
+              
               <button className="btn btn-dark mt-3 mb-2">Login</button>
               <br></br>
               <Link to="/login">Already Have an Account? Login Here</Link>
