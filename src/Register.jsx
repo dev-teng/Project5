@@ -9,6 +9,20 @@ function Register () {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const handleRegistration = () => {
+    if(firstname !== "" && 
+      lastname !== "" && 
+      email !== "" && 
+      password !== "" &&
+      confirmPassword !== "" &&
+      password === confirmPassword
+    ){
+      alert("registration successfull!");
+    }else {
+      alert("There are errors in the registration process. Please try again later.")
+    }
+  }
+
 
   return (
   <div className="container-fluid p-5" style={{width: "50rem"}}>
@@ -65,8 +79,8 @@ function Register () {
                 value={confirmPassword}
                 type="password" className="form-control mb-3"
               />
-              
-              <button className="btn btn-dark mt-3 mb-2">Login</button>
+
+              <button onClick={handleRegistration} className="btn btn-dark mt-3 mb-2">Create Account</button>
               <br></br>
               <Link to="/login">Already Have an Account? Login Here</Link>
           </div>
