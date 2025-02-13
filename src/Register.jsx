@@ -1,14 +1,17 @@
-import { Link} from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import firebaseApp from './firebaseConfig';
 import {getAuth, createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import { useState } from "react";
 import Swal from 'sweetalert2'
 function Register () {
+
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  let navigate = useNavigate();
 
   const handleRegistration = () => {
     if(firstname !== "" && 
@@ -18,16 +21,31 @@ function Register () {
       confirmPassword !== "" &&
       password === confirmPassword
     ){
+
+      const auth = getAuth(firebaseApp);
+      createUserWithEmailAndPassword(auth, email, password).then(
+        (userCredential) => {
+          const user = userCredential.user;
+          updateProfile(auth.currentUser, {
+            firstname: firstname,
+            lastname: lastname
+          });
+
+          navigate("/");
+        });
+
       Swal.fire({
         title: "Registration!",
         text: "Success!",
-        icon: "success"
+        icon: "success",
+        confirmButtonColor: "#f8d7da"
       });
     }else {
       Swal.fire({
         title: "Error!",
         text: "There are errors in the registration process. Please try again later.!",
-        icon: "error"
+        icon: "error",
+        confirmButtonColor: "#dc3545"
       });
     }
   }
