@@ -1,7 +1,7 @@
 import { Link, useNavigate} from "react-router-dom";
 import firebaseApp from './firebaseConfig';
-import {getAuth, createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
-import { useState } from "react";
+import {getAuth, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged} from "firebase/auth";
+import { useState, useEffect } from "react";
 import Swal from 'sweetalert2'
 function Register () {
 
@@ -12,6 +12,15 @@ function Register () {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   let navigate = useNavigate();
+
+  useEffect(() => {
+    const auth = getAuth(firebaseApp);
+    onAuthStateChanged(auth, (user)=> {
+      if(user){
+        navigate("/");
+      }
+    });
+  }, [])
 
   const handleRegistration = () => {
     if(firstname !== "" && 

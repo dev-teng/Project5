@@ -1,7 +1,7 @@
 import firebaseApp from './firebaseConfig';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {getAuth, signInWithEmailAndPassword} from "firebase/auth";
+import {getAuth, signInWithEmailAndPassword, onAuthStateChanged} from "firebase/auth";
 import Swal from 'sweetalert2'
 function Login () {
 
@@ -9,6 +9,15 @@ function Login () {
   const [password, setPassword] = useState("");
 
   let navigate = useNavigate();
+
+  useEffect(() => {
+    const auth = getAuth(firebaseApp);
+    onAuthStateChanged(auth, (user) => {
+      if(user){
+        navigate("/")
+      }
+    });
+  }, [])
 
   const handleLogin = () => {
     if(email !== "" && password !== ""){

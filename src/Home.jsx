@@ -6,7 +6,19 @@ import {getAuth, onAuthStateChanged} from 'firebase/auth';
 
 function Home() {
 
-  
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    const auth = getAuth(firebaseApp)
+    onAuthStateChanged(auth, (user)=> {
+      if(user){
+
+      }else {
+        navigate("/login");
+      }
+    });
+  }, [])
+
 
   return (
     <div className="container-fluid p-5 bg-secondary-subtle d-flex flex-column" style={{ minHeight: "100vh" }}>
