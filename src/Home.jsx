@@ -7,12 +7,16 @@ import {getAuth, onAuthStateChanged, signOut} from 'firebase/auth';
 function Home() {
 
   let navigate = useNavigate();
+  const [userProfile, setUserProfile] = useState({displayName:'', email:''});
 
   useEffect(() => {
     const auth = getAuth(firebaseApp)
     onAuthStateChanged(auth, (user)=> {
       if(user){
-
+        setUserProfile({
+          email: user.email,
+          displayName: user.displayName
+        })
       }else {
         navigate("/login");
       }
@@ -33,8 +37,8 @@ function Home() {
         <div className="col-md-2 border p-2" style={{width: "14rem"}}>
           <h1 className="text-danger">Soul+Sync</h1>
           <div className="card-body d-grid">
-            <span>Username</span>
-            <span>teng@test.com</span>
+            <span>{userProfile.displayName}</span>
+            <span>{userProfile.email}</span>
             <button onClick={logout} className="btn btn-secondary d-grid mt-3">Logout</button>
           </div>
         </div>

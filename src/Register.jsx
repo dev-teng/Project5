@@ -5,8 +5,7 @@ import { useState, useEffect } from "react";
 import Swal from 'sweetalert2'
 function Register () {
 
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -23,8 +22,7 @@ function Register () {
   }, [])
 
   const handleRegistration = () => {
-    if(firstname !== "" && 
-      lastname !== "" && 
+    if(displayName !== "" && 
       email !== "" && 
       password !== "" &&
       confirmPassword !== "" &&
@@ -36,8 +34,7 @@ function Register () {
         (userCredential) => {
           const user = userCredential.user;
           updateProfile(auth.currentUser, {
-            firstname: firstname,
-            lastname: lastname
+            displayName: displayName
           });
 
           navigate("/");
@@ -66,27 +63,17 @@ function Register () {
           <h3 className="text-center">Create an Account</h3>
           <p className="text-center mb-5 fs-5">Sign up here⬇️</p>
           <div className="row mb-4">
-              <div className="col-md-6">
-                <label htmlFor="firstname">First Name</label>
-                <input id="firstname"
+              <div className="col-md-12">
+                <label htmlFor="displayname">Name</label>
+                <input id="displayname"
                   onChange={(e) =>{
-                  setFirstname(e.target.value)
+                  setDisplayName(e.target.value)
                   }}
-                  value={firstname}
+                  value={displayName}
                   type="text" className="form-control"
                 />
               </div>
 
-              <div className="col-md-6">
-                <label htmlFor="lastname">Last Name</label>
-                <input id="lastname" 
-                  onChange={(e) => {
-                  setLastname(e.target.value)
-                  }} 
-                  value={lastname}
-                  type="text" className="form-control"
-                />
-              </div>
           </div>
 
           <div>
