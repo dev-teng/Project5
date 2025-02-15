@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import firebaseApp from './firebaseConfig';
 import { useNavigate } from "react-router-dom";
 import {getAuth, onAuthStateChanged, signOut} from 'firebase/auth';
-import { getFirestore, addDoc, collection } from "firebase/firestore";
+import { getFirestore, addDoc, collection, Timestamp } from "firebase/firestore";
 import Swal from 'sweetalert2';
 
 function Home() {
@@ -12,7 +12,11 @@ function Home() {
   const [userProfile, setUserProfile] = useState({displayName:'', email:''});
   const [sync, setSync] = useState("");
   const db = getFirestore(firebaseApp);
+  
+
+
   const [buttonLoading, setButtonLoading] = useState(false);
+  
 
   useEffect(() => {
     const auth = getAuth(firebaseApp)
@@ -21,7 +25,7 @@ function Home() {
         setUserProfile({
           email: user.email,
           displayName: user.displayName
-        })
+        });
       }else {
         navigate("/login");
       }
@@ -54,7 +58,10 @@ function Home() {
     if(sync !== '') {
       setButtonLoading(true)
       const syncData = {
-        body:sync
+        body: sync,
+        user_email: userProfile.email, 
+        name: userProfile.displayName,
+        date_posted: Timestamp.now()
       }
 
       addDoc(collection(db, "syncs"), syncData).then(() => {
