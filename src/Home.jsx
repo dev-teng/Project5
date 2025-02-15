@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import firebaseApp from './firebaseConfig';
 import { useNavigate } from "react-router-dom";
 import {getAuth, onAuthStateChanged, signOut} from 'firebase/auth';
-import { getFirestore } from "firebase/firestore";
-import Swal from 'sweetalert2'
+import { getFirestore, addDoc, collection } from "firebase/firestore";
+import Swal from 'sweetalert2';
 
 function Home() {
 
@@ -12,6 +12,7 @@ function Home() {
   const [userProfile, setUserProfile] = useState({displayName:'', email:''});
   const [sync, setSync] = useState("");
   const db = getFirestore(firebaseApp);
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   useEffect(() => {
     const auth = getAuth(firebaseApp)
@@ -50,15 +51,30 @@ function Home() {
   };
 
   const createSync = () => {
-    alert('Sync');
+    if(sync !== '') {
+      setButtonLoading(true)
+      const syncData = {
+        body:sync
+      }
+
+      addDoc(collection(db, "syncs"), syncData).then(() => {
+        setSync('');
+        setButtonLoading(false)
+      });
+
+    }else {
+      alert('Sync cannot be empty');
+      setButtonLoading(false)
+    }
+   
   }
 
 
   return (
     <div className="container-fluid p-5 bg-secondary-subtle d-flex flex-column" style={{ minHeight: "100vh" }}>
       <div className="row mb-5">
-        <div className="col-md-2 border p-2" style={{width: "14rem"}}>
-          <h1 className="text-danger">Soul+Sync</h1>
+        <div className="col-md-2 bg-danger-subtle p-3 rounded" style={{width: "14rem"}}>
+          <h2 className="text-danger">Soul❣️Sync</h2>
           <div className="card-body d-grid">
             <span>{userProfile.displayName}</span>
             <span>{userProfile.email}</span>
@@ -75,7 +91,17 @@ function Home() {
             value={sync}
             className="form-control" 
           />
-          <button onClick={createSync} className="btn btn-outline-dark mt-3 ps-3 pe-3">Sync</button>
+          <button onClick={createSync} className="btn btn-outline-dark mt-3 ps-3 pe-3" disabled={buttonLoading}>
+            {buttonLoading ? 
+            (
+              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            )
+            :
+            (
+              "Sync"
+            )
+            }
+          </button>
         </div>
 
         <Sync />

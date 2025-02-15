@@ -55,7 +55,7 @@ function Login () {
   return(
     <div className="container-fluid p-5" style={{width: "50rem"}}>
       <div className="bg-danger-subtle p-5 m-5 rounded">
-        <h1 className="text-center">Welcome to Soul+Sync</h1>
+        <h1 className="text-center">Welcome to Soul❣️Sync</h1>
         <p className="text-center">Your perfect match is just a click away 💓.</p>
         <h4 className="text-secondary">Login to your account</h4>
         <label htmlFor="email">Email</label>
