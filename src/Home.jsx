@@ -4,12 +4,14 @@ import firebaseApp from './firebaseConfig';
 import { useNavigate } from "react-router-dom";
 import {getAuth, onAuthStateChanged, signOut} from 'firebase/auth';
 import { getFirestore } from "firebase/firestore";
+import Swal from 'sweetalert2'
 
 function Home() {
 
   let navigate = useNavigate();
   const [userProfile, setUserProfile] = useState({displayName:'', email:''});
   const [sync, setSync] = useState("");
+  const db = getFirestore(firebaseApp);
 
   useEffect(() => {
     const auth = getAuth(firebaseApp)
@@ -26,11 +28,26 @@ function Home() {
   }, [])
 
   const logout = () => {
-    const auth = getAuth(firebaseApp)
-    signOut(auth).then(() => {
-      navigate("login");
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You will be logged out!",
+      icon: 'warning',
+      confirmButtonColor: "#f8d7da",
+      showCancelButton: true,
+      confirmButtonText: 'Yes, log me out',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const auth = getAuth(firebaseApp)
+        signOut(auth).then(() => {
+        navigate("/login");
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        //Swal.fire('Logout Cancelled');
+      }
     });
-  }
+    
+  };
 
   const createSync = () => {
     alert('Sync');
