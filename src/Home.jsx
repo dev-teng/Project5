@@ -3,11 +3,13 @@ import { useState, useEffect } from "react";
 import firebaseApp from './firebaseConfig';
 import { useNavigate } from "react-router-dom";
 import {getAuth, onAuthStateChanged, signOut} from 'firebase/auth';
+import { getFirestore } from "firebase/firestore";
 
 function Home() {
 
   let navigate = useNavigate();
   const [userProfile, setUserProfile] = useState({displayName:'', email:''});
+  const [sync, setSync] = useState("");
 
   useEffect(() => {
     const auth = getAuth(firebaseApp)
@@ -30,6 +32,10 @@ function Home() {
     });
   }
 
+  const createSync = () => {
+    alert('Sync');
+  }
+
 
   return (
     <div className="container-fluid p-5 bg-secondary-subtle d-flex flex-column" style={{ minHeight: "100vh" }}>
@@ -46,8 +52,13 @@ function Home() {
       <div className="row">
         <div className="col-md-8 offset-md-2 border p-3 bg-danger-subtle">
           <p>What's on your mind?🤯</p>
-          <input type="text" className="form-control" />
-          <button className="btn btn-outline-dark mt-3 ps-3 pe-3">Sync</button>
+          <input type="text" onChange={(e) => {
+            setSync(e.target.value)
+            }}
+            value={sync}
+            className="form-control" 
+          />
+          <button onClick={createSync} className="btn btn-outline-dark mt-3 ps-3 pe-3">Sync</button>
         </div>
 
         <Sync />
