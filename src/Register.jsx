@@ -49,7 +49,7 @@ function Register () {
     }else {
       Swal.fire({
         title: "Error!",
-        text: "There are errors in the registration process. Please try again later.!",
+        text: "There are errors in the registration process. Please try again later!",
         icon: "error",
         confirmButtonColor: "#dc3545"
       });
