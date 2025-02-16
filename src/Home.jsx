@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import firebaseApp from './firebaseConfig';
 import { useNavigate } from "react-router-dom";
 import {getAuth, onAuthStateChanged, signOut} from 'firebase/auth';
-import { getFirestore, addDoc, collection, Timestamp, onSnapshot } from "firebase/firestore";
+import { getFirestore, addDoc, collection, Timestamp, onSnapshot, doc, deleteDoc } from "firebase/firestore";
 import Swal from 'sweetalert2';
 
 function Home() {
@@ -35,7 +35,7 @@ function Home() {
 
 
     onSnapshot(collection(db, "syncs"), snapshot => {
-      setSyncs(snapshot.docs.map(s=>s.data()));
+      setSyncs(snapshot.docs.map(doc =>({id: doc.id, ...doc.data()})));
 
       
     });
@@ -83,7 +83,30 @@ function Home() {
       setButtonLoading(false)
     }
    
-  }
+  };
+
+
+  const handleDelete = (syncId) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "This will delete the post permanently!",
+      icon: 'warning',
+      confirmButtonColor: "#f8d7da",
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteDoc(doc(db, "syncs", syncId))
+          .then(() => {
+            Swal.fire('Deleted!', 'The post has been deleted.', 'success');
+          })
+          .catch((error) => {
+            Swal.fire('Error!', 'Something went wrong.', 'error');
+          });
+      }
+    });
+  };
 
 
   return (
@@ -128,6 +151,7 @@ function Home() {
               email={syncRecord.user_email}
               displayName={syncRecord.displayName}
               date_posted={syncRecord.date_posted.toDate().toString()}
+              onDelete={() => handleDelete(syncRecord.id)}
             />
           ))
         }
