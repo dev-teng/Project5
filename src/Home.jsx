@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import firebaseApp from './firebaseConfig';
 import { useNavigate } from "react-router-dom";
 import {getAuth, onAuthStateChanged, signOut} from 'firebase/auth';
-import { getFirestore, addDoc, collection, Timestamp } from "firebase/firestore";
+import { getFirestore, addDoc, collection, Timestamp, onSnapshot } from "firebase/firestore";
 import Swal from 'sweetalert2';
 
 function Home() {
@@ -12,6 +12,7 @@ function Home() {
   const [userProfile, setUserProfile] = useState({displayName:'', email:''});
   const [sync, setSync] = useState("");
   const db = getFirestore(firebaseApp);
+  const [syncs, setSyncs] = useState([]);
   
 
 
@@ -29,6 +30,14 @@ function Home() {
       }else {
         navigate("/login");
       }
+    });
+
+
+
+    onSnapshot(collection(db, "syncs"), snapshot => {
+      setSyncs(snapshot.docs.map(s=>s.data()));
+
+      
     });
   }, [])
 
@@ -60,7 +69,7 @@ function Home() {
       const syncData = {
         body: sync,
         user_email: userProfile.email, 
-        name: userProfile.displayName,
+        displayName: userProfile.displayName,
         date_posted: Timestamp.now()
       }
 
@@ -111,7 +120,19 @@ function Home() {
           </button>
         </div>
 
-        <Sync />
+        {
+          syncs.map((syncRecord) => (
+            <Sync 
+              key={syncRecord.id}
+              body={syncRecord.body}
+              email={syncRecord.user_email}
+              displayName={syncRecord.displayName}
+              date_posted={syncRecord.date_posted.toDate().toString()}
+            />
+          ))
+        }
+
+        
       </div>
     </div>
   )
