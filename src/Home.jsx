@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import firebaseApp from './firebaseConfig';
 import { useNavigate } from "react-router-dom";
 import {getAuth, onAuthStateChanged, signOut} from 'firebase/auth';
-import { getFirestore, addDoc, collection, Timestamp, onSnapshot, doc, deleteDoc } from "firebase/firestore";
+import { getFirestore, addDoc, collection, Timestamp, onSnapshot, doc, deleteDoc, updateDoc } from "firebase/firestore";
 import Swal from 'sweetalert2';
 
 function Home() {
@@ -13,10 +13,8 @@ function Home() {
   const [sync, setSync] = useState("");
   const db = getFirestore(firebaseApp);
   const [syncs, setSyncs] = useState([]);
-  
-
-
   const [buttonLoading, setButtonLoading] = useState(false);
+  const [editSyncId, setEditSyncId] = useState(null)
   
 
   useEffect(() => {
@@ -71,12 +69,24 @@ function Home() {
         user_email: userProfile.email, 
         displayName: userProfile.displayName,
         date_posted: Timestamp.now()
-      }
+      };
 
-      addDoc(collection(db, "syncs"), syncData).then(() => {
-        setSync('');
-        setButtonLoading(false)
-      });
+      if (editSyncId) {
+        // Update existing sync
+        const syncRef = doc(db, "syncs", editSyncId);
+        updateDoc(syncRef, syncData).then(() => {
+          setSync('');
+          setEditSyncId(null); // Clear edit mode
+          setButtonLoading(false);
+        });
+
+      }else {
+        addDoc(collection(db, "syncs"), syncData).then(() => {
+          setSync('');
+          setButtonLoading(false)
+        });
+      };
+
 
     }else {
       alert('Sync cannot be empty');
@@ -108,6 +118,11 @@ function Home() {
     });
   };
 
+  const handleEdit = (syncId, body) => {
+    setEditSyncId(syncId);
+    setSync(body);
+  };
+
 
   return (
     <div className="container-fluid p-5 bg-secondary-subtle d-flex flex-column" style={{ minHeight: "100vh" }}>
@@ -130,14 +145,14 @@ function Home() {
             value={sync}
             className="form-control" 
           />
-          <button onClick={createSync} className="btn btn-outline-dark mt-3 ps-3 pe-3" disabled={buttonLoading}>
+          <button onClick={createSync} className={`btn ${editSyncId ? 'btn-outline-success' : 'btn-outline-dark'} mt-3 ps-3 pe-3`} disabled={buttonLoading}>
             {buttonLoading ? 
             (
               <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             )
             :
             (
-              "Sync"
+              editSyncId ? "Update" : "Sync"
             )
             }
           </button>
@@ -147,11 +162,13 @@ function Home() {
           syncs.map((syncRecord) => (
             <Sync 
               key={syncRecord.id}
+              syncId={syncRecord.id}
               body={syncRecord.body}
               email={syncRecord.user_email}
               displayName={syncRecord.displayName}
               date_posted={syncRecord.date_posted.toDate().toString()}
               onDelete={() => handleDelete(syncRecord.id)}
+              onEdit={handleEdit}
             />
           ))
         }
